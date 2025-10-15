@@ -9,7 +9,8 @@ import './App.css';
 
 import { Home } from '@/pages/home';
 import { Login } from '@/pages/login';
-
+import {Welcome} from '@/pages/welcome';
+import { Navbar } from '@/components/navbar';
 const { VITE_APP_ID } = env;
 
 function AppContent() {
@@ -21,7 +22,9 @@ function AppContent() {
 function App() {
   return (
     <JwtProvider appId={VITE_APP_ID}>
-      <AppContent />
+      {/* <AppContent /> */}
+      <Navbar/>
+      <Welcome/>
     </JwtProvider>
   );
 }
