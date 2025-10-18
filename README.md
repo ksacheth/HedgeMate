@@ -4,6 +4,14 @@ A monorepo that powers the _Vincent DCA_ demo application.
 
 This project demonstrates how to schedule and execute recurring DCA (Dollar-Cost Averaging) swaps on behalf of end-users using a Vincent App and delegated agent wallets.
 
+## 📚 Documentation
+
+**NEW**: Comprehensive guides to help you understand and work with this repository:
+
+- **[QUICK_START_GUIDE.md](./QUICK_START_GUIDE.md)** - 5-minute setup guide and common troubleshooting
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Detailed architecture, package structure, and development guide
+- **[STRUCTURE_DIAGRAM.md](./STRUCTURE_DIAGRAM.md)** - Visual diagrams and data flow explanations
+
 ## Prerequisites
 
 - Node ^22.16.0
