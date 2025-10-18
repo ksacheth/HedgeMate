@@ -9,6 +9,7 @@ This project demonstrates how to schedule and execute recurring DCA (Dollar-Cost
 **NEW**: Comprehensive guides to help you understand and work with this repository:
 
 - **[QUICK_START_GUIDE.md](./QUICK_START_GUIDE.md)** - 5-minute setup guide and common troubleshooting
+- **[SEPOLIA_TESTNET_GUIDE.md](./SEPOLIA_TESTNET_GUIDE.md)** - Complete guide for testing on Sepolia testnet
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Detailed architecture, package structure, and development guide
 - **[STRUCTURE_DIAGRAM.md](./STRUCTURE_DIAGRAM.md)** - Visual diagrams and data flow explanations
 

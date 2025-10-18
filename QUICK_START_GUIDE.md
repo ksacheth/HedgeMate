@@ -256,7 +256,7 @@ pnpm build
 
 1. Set up your own Vincent App in the dashboard
 2. Understand the abilities: ERC20 Approval and Uniswap Swap
-3. Test with a small amount on testnet first
+3. **Test on Sepolia testnet first** - See [SEPOLIA_TESTNET_GUIDE.md](./SEPOLIA_TESTNET_GUIDE.md) for detailed instructions
 4. Explore the code:
    - Backend: `packages/dca-backend/src/lib/`
    - Frontend: `packages/dca-frontend/src/`
