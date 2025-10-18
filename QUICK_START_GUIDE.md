@@ -229,7 +229,7 @@ pnpm build
 1. **User logs in** via Vincent platform
 2. **User delegates** ERC20 approval and Uniswap swap abilities
 3. **User creates DCA** by specifying:
-   - Token pair (e.g., USDC → WBTC)
+   - Token pair (e.g., USDC → WETH)
    - Amount per swap (e.g., 100 USDC)
    - Frequency (e.g., daily)
 4. **Backend stores** task in MongoDB

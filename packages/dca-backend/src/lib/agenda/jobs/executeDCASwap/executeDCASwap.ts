@@ -36,10 +36,10 @@ export type JobParams = {
 
 const { BASE_RPC_URL, VINCENT_APP_ID } = env;
 
-const BASE_CHAIN_ID = 8453;
-const BASE_USDC_ADDRESS = '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913';
-const BASE_WBTC_ADDRESS = '0x0555E30da8f98308EdB960aa94C0Db47230d2B9c';
-const BASE_UNISWAP_V3_ROUTER = '0x2626664c2603336E57B271c5C0b26F421741e481';
+const BASE_CHAIN_ID = 84532;
+const BASE_USDC_ADDRESS = '0xcCa1595278f5B8CFdA0380943Af9b56493fA14dE';
+const BASE_WETH_ADDRESS = '0x4200000000000000000000000000000000000006';
+const BASE_UNISWAP_V3_ROUTER = '0x94cC0AaC535CCDB3C01d6787D6413C739ae12bc4';
 
 const baseProvider = new ethers.providers.StaticJsonRpcProvider(BASE_RPC_URL);
 const usdcContract = getERC20Contract(BASE_USDC_ADDRESS, baseProvider);
@@ -224,7 +224,7 @@ export async function executeDCASwap(job: JobType, sentryScope: Sentry.Scope): P
       tokenInAddress: BASE_USDC_ADDRESS,
       tokenInAmount: _purchaseAmount,
       tokenInDecimals: 6,
-      tokenOutAddress: BASE_WBTC_ADDRESS,
+      tokenOutAddress: BASE_WETH_ADDRESS,
     });
     sentryScope.addBreadcrumb({
       data: {
@@ -235,16 +235,16 @@ export async function executeDCASwap(job: JobType, sentryScope: Sentry.Scope): P
     // Create a purchase record with all required fields
     const purchase = new PurchasedCoin({
       ethAddress,
-      coinAddress: BASE_WBTC_ADDRESS,
-      name: 'wBTC',
+      coinAddress: BASE_WETH_ADDRESS,
+      name: 'WETH',
       purchaseAmount: purchaseAmount.toFixed(2),
       scheduleId: _id,
-      symbol: 'wBTC',
+      symbol: 'WETH',
       txHash: swapHash,
     });
     await purchase.save();
 
-    consola.debug(`Successfully purchased ${purchaseAmount} USDC of wBTC at tx hash ${swapHash}`);
+    consola.debug(`Successfully purchased ${purchaseAmount} USDC of WETH at tx hash ${swapHash}`);
   } catch (e) {
     // Catch-and-rethrow is usually an antipattern, but Agenda doesn't log failed job reasons to console
     // so this is our chance to log the job failure details using Consola before we throw the error

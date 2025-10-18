@@ -5,16 +5,16 @@ import { ethers } from 'ethers';
 
 const ERC20_ABI = ['function balanceOf(address owner) view returns (uint256)'];
 
-const WBTC_CONTRACT_ADDRESSES: Record<number, string> = {
-  [LIT_EVM_CHAINS.base.chainId]: '0x0555E30da8f98308EdB960aa94C0Db47230d2B9c',
+const WETH_CONTRACT_ADDRESSES: Record<number, string> = {
+  [LIT_EVM_CHAINS.baseSepolia.chainId]: '0x4200000000000000000000000000000000000006',
 };
 
 const USDC_CONTRACT_ADDRESSES: Record<number, string> = {
-  [LIT_EVM_CHAINS.base.chainId]: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
+  [LIT_EVM_CHAINS.baseSepolia.chainId]: '0xcCa1595278f5B8CFdA0380943Af9b56493fA14dE',
 };
 
 export const useChain = () => {
-  const [chain, setChain] = useState<LITEVMChain>(LIT_EVM_CHAINS.base);
+  const [chain, setChain] = useState<LITEVMChain>(LIT_EVM_CHAINS.baseSepolia);
 
   const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrls[0]);
 
@@ -24,8 +24,8 @@ export const useChain = () => {
     provider
   );
 
-  const wbtcContract = new ethers.Contract(
-    WBTC_CONTRACT_ADDRESSES[chain.chainId],
+  const wethContract = new ethers.Contract(
+    WETH_CONTRACT_ADDRESSES[chain.chainId],
     ERC20_ABI,
     provider
   );
@@ -35,6 +35,6 @@ export const useChain = () => {
     setChain,
     provider,
     usdcContract,
-    wbtcContract,
+    wethContract,
   };
 };
