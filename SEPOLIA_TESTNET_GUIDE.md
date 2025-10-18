@@ -12,6 +12,8 @@ By default, the Vincent DCA app is configured to work on **Base mainnet** (Chain
 4. Set up your Vincent App for Sepolia
 5. Obtain testnet tokens (ETH, USDC, WBTC)
 
+> **⚠️ Important Note About Addresses**: Throughout this guide, placeholder addresses like `0xYOUR_SEPOLIA_USDC_ADDRESS` are used. You **must** replace these with actual deployed test token addresses. The guide provides instructions on obtaining these addresses via Aave faucet (recommended) or by deploying your own test tokens.
+
 ## Prerequisites
 
 - Node.js v22.16.0
@@ -65,16 +67,18 @@ const BASE_UNISWAP_V3_ROUTER = '0x2626664c2603336E57B271c5C0b26F421741e481';
 **To Sepolia testnet:**
 ```typescript
 const BASE_CHAIN_ID = 11155111;  // Sepolia Chain ID
-const BASE_USDC_ADDRESS = '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238';  // Sepolia USDC
-const BASE_WBTC_ADDRESS = '0x29f2D40B0605204364af54EC677bD022dA425d03';  // Sepolia WBTC (example)
-const BASE_UNISWAP_V3_ROUTER = '0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD';  // Sepolia Uniswap V3 Router
+// IMPORTANT: Replace these with your actual deployed test token addresses
+const BASE_USDC_ADDRESS = '0xYOUR_SEPOLIA_USDC_ADDRESS';  // Deploy your own or find verified test USDC
+const BASE_WBTC_ADDRESS = '0xYOUR_SEPOLIA_WBTC_ADDRESS';  // Deploy your own or find verified test WBTC
+const BASE_UNISWAP_V3_ROUTER = '0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD';  // Sepolia Uniswap V3 SwapRouter
 ```
 
 **Important Notes:**
-- The contract addresses above are examples. You must verify and use the correct addresses for:
-  - Sepolia USDC test token
-  - Sepolia WBTC test token (or deploy your own ERC20 test tokens)
-  - Sepolia Uniswap V3 Router address
+- The contract addresses above are placeholders. You **must** use actual addresses:
+  - **Option A**: Deploy your own test tokens (see Step 3.2 for deployment instructions)
+  - **Option B**: Use existing verified test tokens from Sepolia Etherscan
+  - **Option C**: Use test tokens from Aave Sepolia faucet (verified addresses provided)
+  - Verify the Uniswap V3 Router address from official Uniswap documentation
 
 ### 1.3 Update Chain References
 
@@ -113,11 +117,13 @@ export const useChain = () => {
 import { LIT_EVM_CHAINS } from '@lit-protocol/constants';
 
 const WBTC_CONTRACT_ADDRESSES: Record<number, string> = {
-  [LIT_EVM_CHAINS.sepolia.chainId]: '0x29f2D40B0605204364af54EC677bD022dA425d03',  // Sepolia WBTC
+  // IMPORTANT: Replace with your actual Sepolia test WBTC token address
+  [LIT_EVM_CHAINS.sepolia.chainId]: '0xYOUR_SEPOLIA_WBTC_ADDRESS',
 };
 
 const USDC_CONTRACT_ADDRESSES: Record<number, string> = {
-  [LIT_EVM_CHAINS.sepolia.chainId]: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',  // Sepolia USDC
+  // IMPORTANT: Replace with your actual Sepolia test USDC token address
+  [LIT_EVM_CHAINS.sepolia.chainId]: '0xYOUR_SEPOLIA_USDC_ADDRESS',
 };
 
 export const useChain = () => {
@@ -125,6 +131,8 @@ export const useChain = () => {
   // ...
 };
 ```
+
+**Note**: Use the same token addresses you configured in the backend.
 
 ### 2.2 Update Frontend Environment
 
@@ -196,20 +204,32 @@ contract TestWBTC is ERC20 {
 }
 ```
 
-**Option 3: Use Aave Sepolia Faucet**
+**Option 3: Use Aave Sepolia Faucet (Recommended)**
 - Visit: https://staging.aave.com/faucet/
 - Connect your wallet
 - Mint test tokens (includes USDC, WBTC, and others)
+- These are verified test tokens with existing liquidity on Sepolia
+- After minting, find the contract addresses on your transaction in Sepolia Etherscan
+
+**How to find the contract addresses:**
+1. After minting from Aave faucet, check your transaction on Sepolia Etherscan
+2. Look at the "Tokens Transferred" section
+3. Click on the token name to get its contract address
+4. Use these verified addresses in your configuration
 
 ## Step 4: Set Up Uniswap V3 on Sepolia
 
 ### 4.1 Find Uniswap V3 Router Address
 
 Uniswap V3 official deployments on Sepolia:
-- **SwapRouter02**: `0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD`
-- **UniversalRouter**: `0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD`
+- **SwapRouter (V3)**: `0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD`
+- **SwapRouter02**: Check official Uniswap documentation for the latest address
 
-Verify at: https://docs.uniswap.org/contracts/v3/reference/deployments
+**Important**: Always verify router addresses from the official Uniswap documentation:
+- Official deployments: https://docs.uniswap.org/contracts/v3/reference/deployments
+- Sepolia contracts on Etherscan: https://sepolia.etherscan.io/
+
+If the router address has changed, update it in your backend configuration.
 
 ### 4.2 Create Liquidity Pools (If Needed)
 
