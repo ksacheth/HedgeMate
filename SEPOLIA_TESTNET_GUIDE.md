@@ -70,15 +70,14 @@ const BASE_CHAIN_ID = 11155111;  // Sepolia Chain ID
 // IMPORTANT: Replace these with your actual deployed test token addresses
 const BASE_USDC_ADDRESS = '0xYOUR_SEPOLIA_USDC_ADDRESS';  // Deploy your own or find verified test USDC
 const BASE_WBTC_ADDRESS = '0xYOUR_SEPOLIA_WBTC_ADDRESS';  // Deploy your own or find verified test WBTC
-const BASE_UNISWAP_V3_ROUTER = '0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD';  // Sepolia Uniswap V3 SwapRouter
+const BASE_UNISWAP_V3_ROUTER = '0xYOUR_SEPOLIA_UNISWAP_ROUTER';  // Verify from Uniswap docs (see Step 4.1)
 ```
 
 **Important Notes:**
-- The contract addresses above are placeholders. You **must** use actual addresses:
-  - **Option A**: Deploy your own test tokens (see Step 3.2 for deployment instructions)
-  - **Option B**: Use existing verified test tokens from Sepolia Etherscan
-  - **Option C**: Use test tokens from Aave Sepolia faucet (verified addresses provided)
-  - Verify the Uniswap V3 Router address from official Uniswap documentation
+- All contract addresses above are placeholders. You **must** use actual verified addresses:
+  - **For test tokens**: Use Aave Sepolia faucet (recommended, see Step 3.2 Option 3) or deploy your own
+  - **For Uniswap Router**: Verify the current address from official Uniswap documentation (see Step 4.1)
+  - Using incorrect or unverified addresses will cause transactions to fail
 
 ### 1.3 Update Chain References
 
@@ -221,15 +220,25 @@ contract TestWBTC is ERC20 {
 
 ### 4.1 Find Uniswap V3 Router Address
 
-Uniswap V3 official deployments on Sepolia:
-- **SwapRouter (V3)**: `0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD`
-- **SwapRouter02**: Check official Uniswap documentation for the latest address
+**You must verify the current Uniswap V3 router address for Sepolia from official sources:**
 
-**Important**: Always verify router addresses from the official Uniswap documentation:
-- Official deployments: https://docs.uniswap.org/contracts/v3/reference/deployments
-- Sepolia contracts on Etherscan: https://sepolia.etherscan.io/
+**Official Sources:**
+- **Uniswap V3 Deployments**: https://docs.uniswap.org/contracts/v3/reference/deployments
+- **Sepolia Etherscan**: https://sepolia.etherscan.io/
 
-If the router address has changed, update it in your backend configuration.
+**Steps to find the correct address:**
+1. Visit the Uniswap documentation link above
+2. Look for "Sepolia Testnet" section
+3. Find the "SwapRouter" or "SwapRouter02" address
+4. Verify the address on Sepolia Etherscan
+5. Use this verified address in your backend configuration
+
+**Common Uniswap V3 Router addresses (verify before using):**
+- SwapRouter: Check Uniswap docs
+- SwapRouter02: Check Uniswap docs
+- UniversalRouter: Check Uniswap docs
+
+**Note**: Uniswap may update their router contracts. Always use the most current version from official documentation.
 
 ### 4.2 Create Liquidity Pools (If Needed)
 
