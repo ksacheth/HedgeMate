@@ -1,10 +1,8 @@
 import { ethers } from 'ethers';
 
-// import { getProvider } from '../utils/alchemy';
-// import getSigner from '../utils/signer';
 import { AAVE_POOL_ABI, AAVE_POOL_ADDRESS_SEPOLIA, USDC_ADDRESS_SEPOLIA } from './constants';
 
-const getProvider = (chainId: number) => {
+export const getProvider = (chainId: number) => {
   const alchemyApiKey = process.env.ALCHEMY_API_KEY;
   if (!alchemyApiKey) {
     throw new Error('ALCHEMY_API_KEY not found in environment variables');
@@ -13,7 +11,7 @@ const getProvider = (chainId: number) => {
   return new ethers.providers.AlchemyProvider(chainId, alchemyApiKey);
 };
 
-const getSigner = (chainId: number) => {
+export const getSigner = (chainId: number) => {
   const privateKey = process.env.PRIVATE_KEY;
   if (!privateKey) {
     throw new Error('PRIVATE_KEY not found in environment variables');

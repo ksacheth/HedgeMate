@@ -2,7 +2,7 @@ import { HermesClient } from '@pythnetwork/hermes-client';
 import PythAbi from '@pythnetwork/pyth-sdk-solidity/abis/IPyth.json' assert { type: 'json' };
 import { ethers } from 'ethers';
 
-import { getSigner } from "./aaveUtils";
+import { getSigner } from './aaveUtils';
 import {
   PYTH_CONTRACT_ADDRESS_SEPOLIA,
   PYTH_PRICE_FEED_ID_ETH_USD,
@@ -10,7 +10,7 @@ import {
   OUR_SMART_CONTRACT_ADDRESS,
 } from './constants';
 
-export async function executeOnChainPriceUpdate(): Promise<string> {
+export async function executeOnChainPriceUpdate(): Promise<Number> {
   const signer = getSigner(11155111);
   const connection = new HermesClient('https://hermes.pyth.network', {});
   const priceUpdates = await connection.getLatestPriceUpdates([PYTH_PRICE_FEED_ID_ETH_USD]);
@@ -25,7 +25,7 @@ export async function executeOnChainPriceUpdate(): Promise<string> {
   );
   const tx = await healthGuardianContract.updatePythPriceFeeds(priceUpdates, { value: updateFee });
   await tx.wait();
-  const storedPrice = await healthGuardianContract.lastEthPrice();
+  const storedPrice = await healthGuardianContract.getETHPrice();
   const priceNumber = ethers.utils.formatUnits(storedPrice, 8);
-  return parseFloat(priceNumber).toString();
+  return parseFloat(priceNumber);
 }
