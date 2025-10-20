@@ -3,7 +3,6 @@ dist
 /packages/**/data
 node_modules
 .github
-.github/prompts/cursor.prompt.md
 
 data
 
