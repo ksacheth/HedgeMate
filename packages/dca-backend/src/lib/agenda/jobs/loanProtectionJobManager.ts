@@ -1,9 +1,9 @@
 import { Agenda } from '@whisthub/agenda';
 
 import { serviceLogger } from '../../logger';
-import { executeLoanProtection } from "./executeDCASwap/executeLoanProtection";
+import { executeLoanProtection } from './executeDCASwap/executeLoanProtection';
 import { ProtectionRule, IProtectionRule } from '../../mongo/protectionRule.schema';
-import { TIME } from "./executeDCASwap/utils/constants";
+import { TIME } from './executeDCASwap/utils/constants';
 
 const JOB_NAME = 'execute-loan-protection';
 
