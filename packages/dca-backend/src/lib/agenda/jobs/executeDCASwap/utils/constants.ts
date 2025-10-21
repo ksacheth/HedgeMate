@@ -55,6 +55,8 @@ export const AAVE_POOL_ABI = [
   },
 ];
 
+export const TIME = '5 minutes';
+
 export const PYUSD_ADDRESS_SEPOLIA = '0x0987654321fedcba0987654321fedcba09876543';
 export const PYUSD_ABI = [];
 
