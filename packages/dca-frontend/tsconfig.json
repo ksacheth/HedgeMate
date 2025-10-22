@@ -1,7 +1,6 @@
 {
-  "include": ["src/**/*.tsx", "src/*.tsx", "eslint.config.js", "vite-env.d.ts"],
+  "include": ["src/**/*.tsx","src/**/*.jsx", "src/*.tsx","src/*.jsx", "eslint.config.js", "vite-env.d.ts"],
   "strictNullChecks": true,
-  "allowJs": true,
   "types": ["jest", "node"],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
@@ -9,6 +8,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "allowJs": true,
+    "checkJs": false,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2020",
     "useDefineForClassFields": true,
