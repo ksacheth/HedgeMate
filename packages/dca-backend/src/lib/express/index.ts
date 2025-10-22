@@ -7,6 +7,7 @@ import { createVincentUserMiddleware } from '@lit-protocol/vincent-app-sdk/expre
 import { getAppInfo, getPKPInfo, isAppUser } from '@lit-protocol/vincent-app-sdk/jwt';
 
 import { handleListPurchasesRoute } from './purchases';
+import { router } from './rules';
 import {
   handleListSchedulesRoute,
   handleEnableScheduleRoute,
@@ -85,5 +86,6 @@ export const registerRoutes = (app: Express) => {
     handler(handleDeleteScheduleRoute)
   );
 
+  app.use('/api/v1/rules', middleware, setSentryUserMiddleware, handler(router));
   serviceLogger.info(`Routes registered`);
 };
