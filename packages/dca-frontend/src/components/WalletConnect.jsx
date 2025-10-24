@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserProvider } from 'ethers';
+import { ethers } from 'ethers';
 import { useState,useEffect } from 'react';
 import { ChevronDown,ChevronUp } from 'lucide-react';
 export default function WalletConnect() {
@@ -40,7 +40,7 @@ export default function WalletConnect() {
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: SEPOLIA_CHAIN_ID }],
       });
-      const provider = new BrowserProvider(window.ethereum);
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = await provider.getSigner();
       const address = await signer.getAddress();
       setIsConnected(true);

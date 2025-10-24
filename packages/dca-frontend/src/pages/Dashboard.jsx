@@ -1,7 +1,6 @@
 import React from "react";
 import { Navbar } from "@/components/navbar";
 import { useEffect,useState } from "react";
-import {BrowserProvider} from "ethers";
 import HealthFactor from "@/components/HealthFactor";
 import { ethers } from "ethers";
 import  {getHealth} from "../utils/aave.js";
@@ -22,7 +21,7 @@ export default function Dashboard(){
       async function getAccountDetails(){
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length != 0) {
-          const provider = new BrowserProvider(window.ethereum);
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
           const signer = await provider.getSigner();
           const addr = await signer.getAddress();
           //converting wei to eth
