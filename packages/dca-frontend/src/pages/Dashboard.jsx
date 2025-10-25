@@ -22,6 +22,7 @@ export default function Dashboard(){
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length != 0) {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
+          console.log(provider);
           const signer = await provider.getSigner();
           const addr = await signer.getAddress();
           //converting wei to eth

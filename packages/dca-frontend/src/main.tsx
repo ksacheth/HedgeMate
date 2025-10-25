@@ -6,10 +6,13 @@ import App from './App';
 import Dashboard from './pages/Dashboard.jsx';
 import { initZendesk } from '@/lib/zendesk';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
+import { config } from './utils/config';
 import { env } from '@/config/env';
 // Initialize Zendesk support widget
 initZendesk();
-
+const queryClient = new QueryClient();
 const { VITE_BACKEND_URL, VITE_IS_DEVELOPMENT, VITE_SENTRY_DSN, VITE_SENTRY_FILTER } = env;
 
 if (VITE_SENTRY_DSN) {
@@ -30,12 +33,16 @@ if (VITE_SENTRY_DSN) {
 }
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route element={<App />} path="/" />
-        <Route element={<Dashboard />} path="/dashboard" />
-      </Routes>
-    </BrowserRouter>
-  </StrictMode>
+  <WagmiProvider config={config}>
+    <QueryClientProvider client={queryClient}>
+      <StrictMode>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<App />} path="/" />
+            <Route element={<Dashboard />} path="/dashboard" />
+          </Routes>
+        </BrowserRouter>
+      </StrictMode>
+    </QueryClientProvider>
+  </WagmiProvider>
 );
