@@ -2,7 +2,7 @@ import { Input } from '@/components/ui/input';
 import React from 'react';
 
 import { Box } from '@/components/ui/box';
-import { Label } from '@/components/ui/label';
+// import { Label } from '@/components/ui/label';
 
 export const DEFAULT_VALUE = '1.00';
 
@@ -21,9 +21,6 @@ export const InputAmount: React.FC<FrequencySelectProps> = ({
 }) => {
   return (
     <Box className="py-0 gap-0 text-center">
-      <Label htmlFor="dcaAmount" className="mb-1 block text-sm font-medium">
-        DCA Amount
-      </Label>
       <Box className="flex flex-row items-center space-x-2">
         <Input
           required={required}

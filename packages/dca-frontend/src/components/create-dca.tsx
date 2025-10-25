@@ -13,41 +13,41 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { DEFAULT_VALUE, InputAmount } from '@/components/input-amount';
-import { FREQUENCIES, SelectFrequency } from '@/components/select-frequency';
 
-export interface CreateDCAProps {
+export interface CreateHealthGuardProps {
   onCreate?: () => void;
 }
 
-export const CreateDCA: React.FC<CreateDCAProps> = ({ onCreate }) => {
+export const CreateHealthGuard: React.FC<CreateHealthGuardProps> = ({ onCreate }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [name] = useState<string>('name');
-  const [purchaseAmount, setPurchaseAmount] = useState<string>(DEFAULT_VALUE);
-  const [frequency, setFrequency] = useState<string>(FREQUENCIES[0].value);
+  const [triggerPrice, setTriggerPrice] = useState<string>(DEFAULT_VALUE);
+  const [repayAmount, setRepayAmount] = useState<string>(DEFAULT_VALUE);
   const { createDCA } = useBackend();
 
-  const handleCreateDCA = async (event: FormEvent<HTMLFormElement>) => {
+  const handleCreateHealthGuard = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!purchaseAmount || Number(purchaseAmount) <= 0) {
-      alert('Please enter a positive DCA amount.');
+    if (!triggerPrice || Number(triggerPrice) <= 0) {
+      alert('Please enter a positive trigger price.');
       return;
     }
-    if (!frequency) {
-      alert('Please select a frequency.');
+    if (!repayAmount || Number(repayAmount) <= 0) {
+      alert('Please enter a positive repay amount.');
       return;
     }
 
     try {
       setLoading(true);
+      // TODO: Update backend to accept triggerPrice and repayAmount
+      // For now, mapping to existing DCA fields for compatibility
       await createDCA({
-        name,
-        purchaseAmount,
-        purchaseIntervalHuman: frequency,
+        name: 'Health Guard',
+        purchaseAmount: repayAmount,
+        purchaseIntervalHuman: triggerPrice,
       });
       onCreate?.();
     } catch (error) {
-      console.error('Error creating DCA:', error);
-      alert('Error creating DCA. Please try again.');
+      console.error('Error creating health guard:', error);
+      alert('Error creating health guard. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -55,23 +55,23 @@ export const CreateDCA: React.FC<CreateDCAProps> = ({ onCreate }) => {
 
   return (
     <Card className="flex flex-col justify-between bg-white p-6 shadow-sm">
-      <form onSubmit={handleCreateDCA}>
+      <form onSubmit={handleCreateHealthGuard}>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Dynamic & Secure DCA on Base</CardTitle>
+          <CardTitle className="text-2xl font-bold">AAVE Health Guardian</CardTitle>
           <CardDescription className="mt-2 text-gray-600">
-            This DCA agent automatically purchases wBTC with a specific amount of USDC on your
-            predefined schedule.
+            Protect your AAVE position from liquidation by automatically repaying debt when
+            collateral prices drop.
             <br />
             <br />
-            <strong>How It Works (Powered by Vincent):</strong>
+            <strong>How It Works:</strong>
             <br />
-            Typically, building automated crypto spending agents involves trusting agent developers
-            or wallet SaaS companies for <strong>key management</strong>. Vincent enables a more
-            secure and simpler process.
+            Set a trigger price for your collateral (e.g., ETH). When the price drops to your
+            trigger level, our bot automatically repays a portion of your debt, improving your
+            health factor and protecting you from liquidation.
             <br />
             <br />
             The agent operates using permissions securely delegated by you, following strict rules
-            you establish during setup—such as authorized abilities. These onchain rules are
+            you establish during setup—such as authorized spending limits. These onchain rules are
             cryptographically enforced by{' '}
             <a
               href="https://litprotocol.com/"
@@ -85,8 +85,8 @@ export const CreateDCA: React.FC<CreateDCAProps> = ({ onCreate }) => {
             automation combined with secure, permissioned execution.
             <br />
             <br />
-            <strong>Note:</strong> Ensure your wallet holds sufficient Base ETH for the app to
-            function smoothly.
+            <strong>Note:</strong> Ensure your wallet has sufficient stablecoins approved for
+            repayment.
           </CardDescription>
         </CardHeader>
 
@@ -94,29 +94,35 @@ export const CreateDCA: React.FC<CreateDCAProps> = ({ onCreate }) => {
 
         <CardContent className="my-8">
           <Box className="space-y-4">
-            <InputAmount
-              required
-              value={purchaseAmount}
-              onChange={setPurchaseAmount}
-              disabled={loading}
-            />
+            <div>
+              <label className="block text-sm font-medium mb-2">Trigger Price (ETH)</label>
+              <InputAmount
+                required
+                value={triggerPrice}
+                onChange={setTriggerPrice}
+                disabled={loading}
+              />
+            </div>
 
             <Separator />
 
-            <SelectFrequency
-              required
-              value={frequency}
-              onChange={setFrequency}
-              disabled={loading}
-            />
+            <div>
+              <label className="block text-sm font-medium mb-2">Repayment Amount</label>
+              <InputAmount
+                required
+                value={repayAmount}
+                onChange={setRepayAmount}
+                disabled={loading}
+              />
+            </div>
           </Box>
         </CardContent>
 
         <Separator className="my-8" />
 
         <CardFooter className="flex justify-center">
-          <Button className="w-full" type="submit">
-            Create DCA
+          <Button className="w-full" type="submit" disabled={loading}>
+            {loading ? 'Creating Guard...' : 'Create Health Guard'}
           </Button>
         </CardFooter>
       </form>

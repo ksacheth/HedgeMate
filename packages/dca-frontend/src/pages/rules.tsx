@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { CreateDCA } from '@/components/create-dca';
+import { CreateHealthGuard } from '@/components/create-dca';
 import { ActiveDcas } from '@/components/active-dcas';
 import { Info } from '@/components/info';
-import { Wallet } from '@/components/wallet';
+// import { Wallet } from '@/components/wallet';
 import { Navbar } from '@/components/navbar';
 
 enum Tab {
-  CreateDCA = 'create-dca',
-  ActiveDCAs = 'active-dcas',
+  CreateHealthGuard = 'create-guard',
+  ActiveGuards = 'active-guards',
   Wallet = 'wallet',
 }
 
 export const Rules: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<Tab>(Tab.CreateDCA);
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.CreateHealthGuard);
 
   return (
     <>
@@ -25,26 +25,26 @@ export const Rules: React.FC = () => {
         }
       >
         <Tabs
-          data-testid="dca-tabs"
+          data-testid="guard-tabs"
           value={activeTab}
           onValueChange={(value) => setActiveTab(value as Tab)}
           className="bg-white p-6 shadow-sm w-full xl:max-w-4xl h-full"
         >
           <TabsList className="mb-4 flex space-x-2 rounded-md bg-gray-200 p-2 w-full">
-            <TabsTrigger value={Tab.CreateDCA}>Create Rule</TabsTrigger>
-            <TabsTrigger value={Tab.ActiveDCAs}>Active Rules</TabsTrigger>
-            <TabsTrigger value={Tab.Wallet}>Wallet</TabsTrigger>
+            <TabsTrigger value={Tab.CreateHealthGuard}>Create Guard</TabsTrigger>
+            <TabsTrigger value={Tab.ActiveGuards}>Active Guards</TabsTrigger>
+            {/* <TabsTrigger value={Tab.Wallet}>Wallet</TabsTrigger> */}
           </TabsList>
 
-          <TabsContent value={Tab.CreateDCA}>
-            <CreateDCA onCreate={() => setActiveTab(Tab.ActiveDCAs)} />
+          <TabsContent value={Tab.CreateHealthGuard}>
+            <CreateHealthGuard onCreate={() => setActiveTab(Tab.ActiveGuards)} />
           </TabsContent>
-          <TabsContent value={Tab.ActiveDCAs}>
+          <TabsContent value={Tab.ActiveGuards}>
             <ActiveDcas />
           </TabsContent>
-          <TabsContent value={Tab.Wallet}>
+          {/* <TabsContent value={Tab.Wallet}>
             <Wallet />
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
 
         <Info />
