@@ -125,9 +125,12 @@ export const useBackend = () => {
     [sendRequest]
   );
 
-  const getHealthFactor = useCallback(async () => {
-    return sendRequest<number>('/health-factor', 'GET');
-  }, [sendRequest]);
+  const getHealthFactor = useCallback(
+    async (userAddress: string) => {
+      return sendRequest<number>('/health-factor', 'POST', { userAddress });
+    },
+    [sendRequest]
+  );
 
   return {
     createDCA,

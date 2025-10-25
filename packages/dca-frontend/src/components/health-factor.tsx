@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useBackend } from '@/hooks/useBackend';
 import { useJwtContext } from '@lit-protocol/vincent-app-sdk/react';
+import { useAccount } from 'wagmi';
 
 export function useHealthFactor() {
   const { authInfo } = useJwtContext();
+  const { address, isConnected } = useAccount();
   const { getHealthFactor } = useBackend();
   const [healthFactor, setHealthFactor] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
@@ -20,7 +22,11 @@ export function useHealthFactor() {
       try {
         setLoading(true);
         setError(null);
-        const hf = await getHealthFactor();
+        if (!isConnected || !address) {
+          setError('Wallet not connected');
+          return;
+        }
+        const hf = await getHealthFactor(address);
         setHealthFactor(hf);
       } catch (err) {
         console.error('Error fetching health factor:', err);
@@ -34,7 +40,7 @@ export function useHealthFactor() {
     // Refresh health factor every 60 seconds
     const interval = setInterval(fetchHealthFactor, 60000);
     return () => clearInterval(interval);
-  }, [getHealthFactor, authInfo?.jwt]);
+  }, [getHealthFactor, authInfo?.jwt, address, isConnected]);
 
   return { healthFactor, loading, error };
 }

@@ -60,7 +60,7 @@ export const registerRoutes = (app: Express) => {
   app.use(cors(corsConfig));
 
   app.get('/purchases', middleware, setSentryUserMiddleware, handler(handleListPurchasesRoute));
-  app.get(
+  app.post(
     '/health-factor',
     middleware,
     setSentryUserMiddleware,

@@ -1,7 +1,5 @@
 import { Response } from 'express';
 
-import { getPKPInfo } from '@lit-protocol/vincent-app-sdk/jwt';
-
 import { VincentAuthenticatedRequest } from './types';
 import { checkHealthFactor } from '../agenda/jobs/executeDCASwap/utils/aaveUtils';
 
@@ -10,12 +8,16 @@ export const handleGetHealthFactorRoute = async (
   res: Response
 ) => {
   try {
-    const { ethAddress } = getPKPInfo(req.user.decodedJWT);
+    const { userAddress } = req.body;
 
-    const healthFactor = await checkHealthFactor(ethAddress);
+    if (!userAddress) {
+      return res.status(400).json({ error: 'userAddress is required', success: false });
+    }
 
-    res.json({ data: { healthFactor }, success: true });
+    const healthFactor = await checkHealthFactor(userAddress);
+
+    return res.json({ data: { healthFactor }, success: true });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch health factor', success: false });
+    return res.status(500).json({ error: 'Failed to fetch health factor', success: false });
   }
 };
