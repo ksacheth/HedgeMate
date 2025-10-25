@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { CreateHealthGuard } from '@/components/create-dca';
-import { ActiveDcas } from '@/components/active-dcas';
+import { ActiveGuards } from '@/components/active-dcas';
 import { Info } from '@/components/info';
 
 enum Tab {
@@ -34,7 +34,7 @@ export const Home: React.FC = () => {
           <CreateHealthGuard onCreate={() => setActiveTab(Tab.ActiveGuards)} />
         </TabsContent>
         <TabsContent value={Tab.ActiveGuards}>
-          <ActiveDcas />
+          <ActiveGuards />
         </TabsContent>
         {/* <TabsContent value={Tab.Wallet}>
           <Wallet />
