@@ -1,7 +1,7 @@
 import { useAccount, useBalance } from 'wagmi';
 import { Navbar } from '@/components/navbar';
 import { useHealthFactor } from '@/components/health-factor';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { Copy, Check } from 'lucide-react';
 
