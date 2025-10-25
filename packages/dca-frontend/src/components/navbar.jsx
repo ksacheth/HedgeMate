@@ -27,6 +27,12 @@ export const Navbar = () => {
             >
               Dashboard
             </div>
+            <div
+              className="font-semibold hover:scale-110 text-gray-800 cursor-pointer mr-8"
+              onClick={() => navigate('/rules')}
+            >
+              Rules
+            </div>
             <ConnectKitButton />
             {/* <WalletConnect/> */}
             {/* <button

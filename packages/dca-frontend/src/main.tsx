@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { env } from '@/config/env';
 import { Web3Provider } from '@/components/web3-provider';
 import { JwtProvider } from '@lit-protocol/vincent-app-sdk/react';
+import { Rules } from './pages/rules';
 
 // Initialize Zendesk support widget
 initZendesk();
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')!).render(
           <Routes>
             <Route element={<App />} path="/" />
             <Route element={<Dashboard />} path="/dashboard" />
+            <Route element={<Rules />} path="/rules" />
           </Routes>
         </BrowserRouter>
       </Web3Provider>
