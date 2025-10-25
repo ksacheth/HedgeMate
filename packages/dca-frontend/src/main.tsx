@@ -7,10 +7,14 @@ import Dashboard from './pages/dashboard.jsx';
 import { initZendesk } from '@/lib/zendesk';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { env } from '@/config/env';
+import { Web3Provider } from '@/components/web3-provider';
+import { JwtProvider } from '@lit-protocol/vincent-app-sdk/react';
+
 // Initialize Zendesk support widget
 initZendesk();
 
-const { VITE_BACKEND_URL, VITE_IS_DEVELOPMENT, VITE_SENTRY_DSN, VITE_SENTRY_FILTER } = env;
+const { VITE_BACKEND_URL, VITE_IS_DEVELOPMENT, VITE_SENTRY_DSN, VITE_SENTRY_FILTER, VITE_APP_ID } =
+  env;
 
 if (VITE_SENTRY_DSN) {
   Sentry.init({
@@ -31,11 +35,15 @@ if (VITE_SENTRY_DSN) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route element={<App />} path="/" />
-        <Route element={<Dashboard />} path="/dashboard" />
-      </Routes>
-    </BrowserRouter>
+    <JwtProvider appId={VITE_APP_ID}>
+      <Web3Provider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<App />} path="/" />
+            <Route element={<Dashboard />} path="/dashboard" />
+          </Routes>
+        </BrowserRouter>
+      </Web3Provider>
+    </JwtProvider>
   </StrictMode>
 );

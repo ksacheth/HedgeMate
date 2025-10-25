@@ -20,7 +20,7 @@ export const Home: React.FC = () => {
       className={'flex flex-col items-center justify-center min-h-screen min-w-screen bg-gray-100'}
     >
       <Tabs
-        data-testId="dca-tabs"
+        data-testid="dca-tabs"
         value={activeTab}
         onValueChange={(value) => setActiveTab(value as Tab)}
         className="bg-white p-6 shadow-sm w-full xl:max-w-4xl h-full"
