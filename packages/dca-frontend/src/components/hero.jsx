@@ -33,7 +33,7 @@ export const Hero = () => {
 							</button>
 						</div>
 					</div>
-
+					
 					{/* Right: illustration / card */}
 					<div className="flex justify-center lg:justify-end">
 						<div className="w-full max-w-sm space-y-4">

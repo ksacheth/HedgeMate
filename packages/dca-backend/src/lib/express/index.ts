@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import { createVincentUserMiddleware } from '@lit-protocol/vincent-app-sdk/expressMiddleware';
 import { getAppInfo, getPKPInfo, isAppUser } from '@lit-protocol/vincent-app-sdk/jwt';
 
+import { handleGetHealthFactorRoute } from './healthFactor';
 import { handleListPurchasesRoute } from './purchases';
 import { router } from './rules';
 import {
@@ -59,6 +60,12 @@ export const registerRoutes = (app: Express) => {
   app.use(cors(corsConfig));
 
   app.get('/purchases', middleware, setSentryUserMiddleware, handler(handleListPurchasesRoute));
+  app.get(
+    '/health-factor',
+    middleware,
+    setSentryUserMiddleware,
+    handler(handleGetHealthFactorRoute)
+  );
   app.get('/schedules', middleware, setSentryUserMiddleware, handler(handleListSchedulesRoute));
   app.post('/schedule', middleware, setSentryUserMiddleware, handler(handleCreateScheduleRoute));
   app.put(

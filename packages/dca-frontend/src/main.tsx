@@ -3,10 +3,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
+import Dashboard from './pages/dashboard.jsx';
 import { initZendesk } from '@/lib/zendesk';
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { env } from '@/config/env';
-
 // Initialize Zendesk support widget
 initZendesk();
 
@@ -31,6 +31,11 @@ if (VITE_SENTRY_DSN) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route element={<App />} path="/" />
+        <Route element={<Dashboard />} path="/dashboard" />
+      </Routes>
+    </BrowserRouter>
   </StrictMode>
 );

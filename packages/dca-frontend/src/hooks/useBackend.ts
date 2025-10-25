@@ -36,6 +36,10 @@ export interface CreateDCARequest {
   purchaseIntervalHuman: string;
 }
 
+export type HealthFactorResponse = {
+  healthFactor: number;
+};
+
 export const useBackend = () => {
   const { authInfo } = useJwtContext();
   const vincentWebAuthClient = useVincentWebAuthClient(VITE_APP_ID);
@@ -121,6 +125,10 @@ export const useBackend = () => {
     [sendRequest]
   );
 
+  const getHealthFactor = useCallback(async () => {
+    return sendRequest<number>('/health-factor', 'GET');
+  }, [sendRequest]);
+
   return {
     createDCA,
     deleteDCA,
@@ -128,6 +136,7 @@ export const useBackend = () => {
     editDCA,
     enableDCA,
     getDCAs,
+    getHealthFactor,
     getJwt,
   };
 };
