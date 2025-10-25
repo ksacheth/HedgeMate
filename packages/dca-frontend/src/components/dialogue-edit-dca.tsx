@@ -15,27 +15,27 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import { DCA, useBackend } from '@/hooks/useBackend';
+import { Guard, useBackend } from '@/hooks/useBackend';
 
 export interface EditDialogProps {
-  dca: DCA;
-  onUpdate?: (updatedDCA: DCA) => void;
+  guard: Guard;
+  onUpdate?: (updatedGuard: Guard) => void;
 }
 
-export const DialogueEditDCA: React.FC<EditDialogProps> = ({ dca, onUpdate }) => {
-  const { data } = dca;
+export const DialogueEditGuard: React.FC<EditDialogProps> = ({ guard, onUpdate }) => {
+  const { data } = guard;
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [purchaseAmount, setPurchaseAmount] = useState<string>(String(data.purchaseAmount));
-  const [frequency, setFrequency] = useState<string>(data.purchaseIntervalHuman);
+  const [repayAmount, setrepayAmount] = useState<string>(String(data.repayAmount));
+  const [frequency, setFrequency] = useState<string>(data.triggerPrice);
 
-  const { editDCA } = useBackend();
+  const { editGuard } = useBackend();
 
-  const handleEditDCA = useCallback(
+  const handleEditGuard = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      if (!purchaseAmount || Number(purchaseAmount) <= 0) {
-        alert('Please enter a positive DCA amount.');
+      if (!repayAmount || Number(repayAmount) <= 0) {
+        alert('Please enter a positive Guard amount.');
         return;
       }
       if (!frequency) {
@@ -44,18 +44,18 @@ export const DialogueEditDCA: React.FC<EditDialogProps> = ({ dca, onUpdate }) =>
       }
       try {
         setLoading(true);
-        const updatedDCA = await editDCA(dca._id, {
+        const updatedGuard = await editGuard(guard._id, {
           name: data.name,
-          purchaseAmount,
-          purchaseIntervalHuman: frequency,
+          repayAmount,
+          triggerPrice: frequency,
         });
-        onUpdate?.(updatedDCA);
+        onUpdate?.(updatedGuard);
         setOpen(false);
       } finally {
         setLoading(false);
       }
     },
-    [dca, editDCA, frequency, onUpdate, purchaseAmount, data.name]
+    [guard, editGuard, frequency, onUpdate, repayAmount, data.name]
   );
 
   return (
@@ -66,18 +66,18 @@ export const DialogueEditDCA: React.FC<EditDialogProps> = ({ dca, onUpdate }) =>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleEditDCA}>
+        <form onSubmit={handleEditGuard}>
           <DialogHeader>
-            <DialogTitle>Edit DCA Schedule</DialogTitle>
+            <DialogTitle>Edit Guard Schedule</DialogTitle>
             <DialogDescription>
-              Make changes to your DCA Schedule here. Click save when you're done.
+              Make changes to your Guard Schedule here. Click save when you're done.
             </DialogDescription>
           </DialogHeader>
           <Box className="grid gap-4 py-4">
             <InputAmount
               required
-              value={purchaseAmount}
-              onChange={setPurchaseAmount}
+              value={repayAmount}
+              onChange={setrepayAmount}
               disabled={loading}
             />
 

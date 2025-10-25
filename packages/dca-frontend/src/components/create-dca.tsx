@@ -22,7 +22,7 @@ export const CreateHealthGuard: React.FC<CreateHealthGuardProps> = ({ onCreate }
   const [loading, setLoading] = useState<boolean>(false);
   const [triggerPrice, setTriggerPrice] = useState<string>(DEFAULT_VALUE);
   const [repayAmount, setRepayAmount] = useState<string>(DEFAULT_VALUE);
-  const { createDCA } = useBackend();
+  const { createGuard } = useBackend();
 
   const handleCreateHealthGuard = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,10 +39,10 @@ export const CreateHealthGuard: React.FC<CreateHealthGuardProps> = ({ onCreate }
       setLoading(true);
       // TODO: Update backend to accept triggerPrice and repayAmount
       // For now, mapping to existing DCA fields for compatibility
-      await createDCA({
+      await createGuard({
         name: 'Health Guard',
-        purchaseAmount: repayAmount,
-        purchaseIntervalHuman: triggerPrice,
+        repayAmount: repayAmount,
+        triggerPrice: triggerPrice,
       });
       onCreate?.();
     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Delete, Pause, Play } from 'lucide-react';
 
-import { useBackend, DCA } from '@/hooks/useBackend';
+import { useBackend, Guard } from '@/hooks/useBackend';
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,19 +14,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { DialogueEditDCA } from '@/components/dialogue-edit-dca';
+import { DialogueEditGuard } from '@/components/dialogue-edit-dca';
 import { FREQUENCIES } from '@/components/select-frequency';
 import { Spinner } from '@/components/ui/spinner';
-import { DialogueDcaFailedDetails } from '@/components/dialogue-dca-failed-details';
+import { DialogueGuardFailedDetails } from '@/components/dialogue-dca-failed-details';
 
 import { cn } from '@/lib/utils';
 
-function renderDCASchedulesTable(
-  activeDCAs: DCA[],
-  handleUpdatedDCA: (updatedDCA: DCA) => Promise<void>,
-  handleDisableDCA: (dcaId: string) => Promise<void>,
-  handleEnableDCA: (dcaId: string) => Promise<void>,
-  handleDeleteDCA: (dcaId: string) => Promise<void>
+function renderGuardSchedulesTable(
+  activeGuards: Guard[],
+  handleUpdatedGuard: (updatedGuard: Guard) => Promise<void>,
+  handleDisableGuard: (guardId: string) => Promise<void>,
+  handleEnableGuard: (guardId: string) => Promise<void>,
+  handleDeleteGuard: (guardId: string) => Promise<void>
 ) {
   return (
     <Table>
@@ -41,14 +41,14 @@ function renderDCASchedulesTable(
       </TableHeader>
 
       <TableBody>
-        {activeDCAs.map((dca) => {
+        {activeGuards.map((guard) => {
           const {
             disabled,
             lastFinishedAt,
             failedAt,
             _id: uniqueKey,
-            data: { purchaseAmount, purchaseIntervalHuman, updatedAt },
-          } = dca;
+            data: { repayAmount, triggerPrice, updatedAt },
+          } = guard;
 
           const failedAfterLastRun =
             failedAt && lastFinishedAt ? new Date(lastFinishedAt) <= new Date(failedAt) : false;
@@ -56,10 +56,9 @@ function renderDCASchedulesTable(
           const active = !disabled;
           return (
             <TableRow key={uniqueKey}>
-              <TableCell>${purchaseAmount}</TableCell>
+              <TableCell>${repayAmount}</TableCell>
               <TableCell>
-                {FREQUENCIES.find((freq) => freq.value === purchaseIntervalHuman)?.label ||
-                  purchaseIntervalHuman}
+                {FREQUENCIES.find((freq) => freq.value === triggerPrice)?.label || triggerPrice}
               </TableCell>
               <TableCell>{new Date(updatedAt).toLocaleString()}</TableCell>
               <TableCell>
@@ -70,22 +69,22 @@ function renderDCASchedulesTable(
                   )}
                 >
                   {!active ? 'Inactive' : failedAfterLastRun ? 'Failed' : 'Active'}
-                  {failedAfterLastRun && <DialogueDcaFailedDetails dca={dca} />}
+                  {failedAfterLastRun && <DialogueGuardFailedDetails guard={guard} />}
                 </span>
               </TableCell>
               <TableCell>
                 <Box className="flex flex-row items-center justify-end gap-2 p-1">
-                  <DialogueEditDCA dca={dca} onUpdate={handleUpdatedDCA} />
+                  <DialogueEditGuard guard={guard} onUpdate={handleUpdatedGuard} />
                   {active ? (
-                    <Button variant="destructive" onClick={() => handleDisableDCA(dca._id)}>
+                    <Button variant="destructive" onClick={() => handleDisableGuard(guard._id)}>
                       <Pause />
                     </Button>
                   ) : (
-                    <Button variant="default" onClick={() => handleEnableDCA(dca._id)}>
+                    <Button variant="default" onClick={() => handleEnableGuard(guard._id)}>
                       <Play />
                     </Button>
                   )}
-                  <Button variant="destructive" onClick={() => handleDeleteDCA(dca._id)}>
+                  <Button variant="destructive" onClick={() => handleDeleteGuard(guard._id)}>
                     <Delete />
                   </Button>
                 </Box>
@@ -107,126 +106,132 @@ function renderSpinner() {
 }
 
 function renderContent(
-  activeDCAs: DCA[],
+  activeGuards: Guard[],
   isLoading: boolean,
-  handleUpdatedDCA: (updatedDCA: DCA) => Promise<void>,
-  handleDisableDCA: (dcaId: string) => Promise<void>,
-  handleEnableDCA: (dcaId: string) => Promise<void>,
-  handleDeleteDCA: (dcaId: string) => Promise<void>
+  handleUpdatedGuard: (updatedGuard: Guard) => Promise<void>,
+  handleDisableGuard: (guardId: string) => Promise<void>,
+  handleEnableGuard: (guardId: string) => Promise<void>,
+  handleDeleteGuard: (guardId: string) => Promise<void>
 ) {
-  console.log('activeDCAs', activeDCAs);
-  if (!activeDCAs.length && isLoading) {
+  console.log('activeGuards', activeGuards);
+  if (!activeGuards.length && isLoading) {
     return renderSpinner();
-  } else if (activeDCAs.length) {
-    return renderDCASchedulesTable(
-      activeDCAs,
-      handleUpdatedDCA,
-      handleDisableDCA,
-      handleEnableDCA,
-      handleDeleteDCA
+  } else if (activeGuards.length) {
+    return renderGuardSchedulesTable(
+      activeGuards,
+      handleUpdatedGuard,
+      handleDisableGuard,
+      handleEnableGuard,
+      handleDeleteGuard
     );
   } else {
-    return <div className="flex justify-center">No active DCAs</div>;
+    return <div className="flex justify-center">No active Guards</div>;
   }
 }
 
-export const ActiveDcas: React.FC = () => {
-  const [activeDCAs, setActiveDCAs] = useState<DCA[]>([]);
-  const { deleteDCA, disableDCA, enableDCA, getDCAs } = useBackend();
+export const ActiveGuards: React.FC = () => {
+  const [activeGuards, setActiveGuards] = useState<Guard[]>([]);
+  const { deleteGuard, disableGuard, enableGuard, getGuards } = useBackend();
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDCAs = async () => {
+    const fetchGuards = async () => {
       try {
-        const dcas = await getDCAs();
+        const guards = await getGuards();
 
-        setActiveDCAs(dcas);
+        setActiveGuards(guards);
       } catch (error) {
-        console.error('Error fetching active DCAs:', error);
+        console.error('Error fetching active Guards:', error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchDCAs();
-  }, [getDCAs]);
+    fetchGuards();
+  }, [getGuards]);
 
-  const handleDisableDCA = useCallback(
-    async (dcaId: string) => {
+  const handleDisableGuard = useCallback(
+    async (guardId: string) => {
       try {
-        await disableDCA(dcaId);
+        await disableGuard(guardId);
 
-        const updatedDCAs = [...activeDCAs];
-        const index = updatedDCAs.findIndex((dca) => dca._id === dcaId);
-        updatedDCAs[index].disabled = true;
-        setActiveDCAs(updatedDCAs);
+        const updatedGuards = [...activeGuards];
+        const index = updatedGuards.findIndex((guard) => guard._id === guardId);
+        if (index !== -1) {
+          updatedGuards[index].disabled = true;
+          setActiveGuards(updatedGuards);
+        }
       } catch (error) {
-        console.error('Error disabling DCA:', error);
+        console.error('Error disabling Guard:', error);
       }
     },
-    [activeDCAs, disableDCA, setActiveDCAs]
+    [activeGuards, disableGuard]
   );
 
-  const handleEnableDCA = useCallback(
-    async (dcaId: string) => {
+  const handleEnableGuard = useCallback(
+    async (guardId: string) => {
       try {
-        await enableDCA(dcaId);
+        await enableGuard(guardId);
 
-        const updatedDCAs = [...activeDCAs];
-        const index = updatedDCAs.findIndex((dca) => dca._id === dcaId);
-        updatedDCAs[index].disabled = false;
-        setActiveDCAs(updatedDCAs);
+        const updatedGuards = [...activeGuards];
+        const index = updatedGuards.findIndex((guard) => guard._id === guardId);
+        if (index !== -1) {
+          updatedGuards[index].disabled = false;
+          setActiveGuards(updatedGuards);
+        }
       } catch (error) {
-        console.error('Error disabling DCA:', error);
+        console.error('Error enabling Guard:', error);
       }
     },
-    [activeDCAs, enableDCA, setActiveDCAs]
+    [activeGuards, enableGuard]
   );
 
-  const handleUpdatedDCA = useCallback(
-    async (updatedDCA: DCA) => {
+  const handleUpdatedGuard = useCallback(
+    async (updatedGuard: Guard) => {
       try {
-        const updatedDCAs = [...activeDCAs];
-        const index = updatedDCAs.findIndex((dca) => dca._id === updatedDCA._id);
-        updatedDCAs[index] = updatedDCA;
-        setActiveDCAs(updatedDCAs);
+        const updatedGuards = [...activeGuards];
+        const index = updatedGuards.findIndex((guard) => guard._id === updatedGuard._id);
+        if (index !== -1) {
+          updatedGuards[index] = updatedGuard;
+          setActiveGuards(updatedGuards);
+        }
       } catch (error) {
-        console.error('Error disabling DCA:', error);
+        console.error('Error updating Guard:', error);
       }
     },
-    [activeDCAs, setActiveDCAs]
+    [activeGuards]
   );
 
-  const handleDeleteDCA = useCallback(
-    async (dcaId: string) => {
+  const handleDeleteGuard = useCallback(
+    async (guardId: string) => {
       try {
-        await deleteDCA(dcaId);
+        await deleteGuard(guardId);
 
-        const updatedDCAs = [...activeDCAs.filter((dca) => dca._id !== dcaId)];
-        setActiveDCAs(updatedDCAs);
+        const updatedGuards = [...activeGuards.filter((guard) => guard._id !== guardId)];
+        setActiveGuards(updatedGuards);
       } catch (error) {
-        console.error('Error disabling DCA:', error);
+        console.error('Error deleting Guard:', error);
       }
     },
-    [activeDCAs, deleteDCA, setActiveDCAs]
+    [activeGuards, deleteGuard]
   );
 
   return (
     <Card data-test-id="active-dcas" className="w-full bg-white p-6 shadow-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Active DCA Schedules</CardTitle>
+        <CardTitle className="text-2xl font-bold">Active Guard Schedules</CardTitle>
       </CardHeader>
 
       <Separator />
 
       <CardContent>
         {renderContent(
-          activeDCAs,
+          activeGuards,
           isLoading,
-          handleUpdatedDCA,
-          handleDisableDCA,
-          handleEnableDCA,
-          handleDeleteDCA
+          handleUpdatedGuard,
+          handleDisableGuard,
+          handleEnableGuard,
+          handleDeleteGuard
         )}
       </CardContent>
     </Card>
