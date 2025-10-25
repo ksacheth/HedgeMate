@@ -1,12 +1,13 @@
 import { Agenda } from '@whisthub/agenda';
 
 import { LoanProtectionJobManager } from './loanProtectionJobManager';
+import { env } from '../../env';
 import { serviceLogger } from '../../logger';
 
-const mongoConnectionString = process.env.MONGO_URI;
+const mongoConnectionString = env.MONGODB_URI;
 if (!mongoConnectionString) {
-  serviceLogger.error('[JobManagerInstance] MONGO_URI is not set. Job manager cannot start.');
-  throw new Error('MONGO_URI is not set.');
+  serviceLogger.error('[JobManagerInstance] MONGODB_URI is not set. Job manager cannot start.');
+  throw new Error('MONGODB_URI is not set.');
 }
 
 const agenda = new Agenda({

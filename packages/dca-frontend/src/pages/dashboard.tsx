@@ -60,7 +60,7 @@ export default function Dashboard() {
 
           <div className="flex flex-row items-start justify-between border-2 border-indigo-100 rounded-2xl w-full md:w-xl p-6 shadow-md min-h-[180px]">
             <div className="flex flex-col ">
-              <span className="font-semibold text-xl text-gray-900">Health Meter</span>
+              <span className="font-semibold text-xl text-gray-900">Health Factor</span>
               <span className="font-bold  text-3xl md:text-5xl text-blue-900 mt-10">
                 {hfLoading ? 'Loading...' : healthFactor ? healthFactor.toFixed(2) : 'N/A'}
               </span>
