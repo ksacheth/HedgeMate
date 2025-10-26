@@ -37,10 +37,11 @@ export const CreateHealthGuard: React.FC<CreateHealthGuardProps> = ({ onCreate }
 
     try {
       setLoading(true);
-      // TODO: Update backend to accept triggerPrice and repayAmount
-      // For now, mapping to existing DCA fields for compatibility
       await createGuard({
-        name: 'Health Guard',
+        chainId: 11155111, // Sepolia testnet
+        collateralAsset: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14', // WETH on Sepolia
+        debtAsset: '0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8', // USDC on Sepolia
+        protocol: 'AaveV3',
         repayAmount: repayAmount,
         triggerPrice: triggerPrice,
       });
@@ -94,27 +95,23 @@ export const CreateHealthGuard: React.FC<CreateHealthGuardProps> = ({ onCreate }
 
         <CardContent className="my-8">
           <Box className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Trigger Price (ETH)</label>
-              <InputAmount
-                required
-                value={triggerPrice}
-                onChange={setTriggerPrice}
-                disabled={loading}
-              />
-            </div>
+            <InputAmount
+              required
+              label="Trigger Price (ETH)"
+              value={triggerPrice}
+              onChange={setTriggerPrice}
+              disabled={loading}
+            />
 
             <Separator />
 
-            <div>
-              <label className="block text-sm font-medium mb-2">Repayment Amount</label>
-              <InputAmount
-                required
-                value={repayAmount}
-                onChange={setRepayAmount}
-                disabled={loading}
-              />
-            </div>
+            <InputAmount
+              required
+              label="Repay Amount"
+              value={repayAmount}
+              onChange={setRepayAmount}
+              disabled={loading}
+            />
           </Box>
         </CardContent>
 

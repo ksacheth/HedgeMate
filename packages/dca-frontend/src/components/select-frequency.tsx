@@ -30,6 +30,7 @@ export interface FrequencySelectProps {
   onChange?: (value: string) => void;
   required?: boolean;
   value?: string;
+  label?: string;
 }
 
 export const SelectFrequency: React.FC<FrequencySelectProps> = ({
@@ -37,11 +38,12 @@ export const SelectFrequency: React.FC<FrequencySelectProps> = ({
   onChange,
   value,
   required,
+  label = 'Frequency',
 }) => {
   return (
     <Box className="py-0 gap-0 text-center">
       <Label htmlFor="frequency" className="mb-1 block text-sm font-medium">
-        Frequency
+        {label}
       </Label>
       <Select required={required} value={value} onValueChange={onChange} disabled={disabled}>
         <SelectTrigger id="frequency" className="w-full">

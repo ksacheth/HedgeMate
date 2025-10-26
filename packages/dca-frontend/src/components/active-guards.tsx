@@ -15,7 +15,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { DialogueEditGuard } from '@/components/dialogue-edit-guard';
-import { FREQUENCIES } from '@/components/select-frequency';
 import { Spinner } from '@/components/ui/spinner';
 import { DialogueGuardFailedDetails } from '@/components/dialogue-guard-failed-details';
 
@@ -33,7 +32,7 @@ function renderGuardSchedulesTable(
       <TableHeader>
         <TableRow>
           <TableHead>Amount (USD)</TableHead>
-          <TableHead>Frequency</TableHead>
+          <TableHead>Trigger Amount</TableHead>
           <TableHead>Last Update</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="text-right">Actions</TableHead>
@@ -57,9 +56,7 @@ function renderGuardSchedulesTable(
           return (
             <TableRow key={uniqueKey}>
               <TableCell>${repayAmount}</TableCell>
-              <TableCell>
-                {FREQUENCIES.find((freq) => freq.value === triggerPrice)?.label || triggerPrice}
-              </TableCell>
+              <TableCell>${triggerPrice}</TableCell>
               <TableCell>{new Date(updatedAt).toLocaleString()}</TableCell>
               <TableCell>
                 <span

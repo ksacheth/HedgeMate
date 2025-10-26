@@ -31,7 +31,10 @@ export type Guard = {
 };
 
 export interface createGuardRequest {
-  name: string;
+  chainId: number;
+  collateralAsset: string;
+  debtAsset: string;
+  protocol?: string;
   repayAmount: string;
   triggerPrice: string;
 }
@@ -88,39 +91,39 @@ export const useBackend = () => {
 
   const createGuard = useCallback(
     async (guard: createGuardRequest) => {
-      return sendRequest<Guard>('/schedule', 'POST', guard);
+      return sendRequest<Guard>('/protection-rule', 'POST', guard);
     },
     [sendRequest]
   );
 
   const getGuards = useCallback(async () => {
-    return sendRequest<Guard[]>('/schedules', 'GET');
+    return sendRequest<Guard[]>('/protection-rules', 'GET');
   }, [sendRequest]);
 
   const disableGuard = useCallback(
     async (scheduleId: string) => {
-      return sendRequest<Guard>(`/schedules/${scheduleId}/disable`, 'PUT');
+      return sendRequest<Guard>(`/protection-rules/${scheduleId}/disable`, 'PUT');
     },
     [sendRequest]
   );
 
   const enableGuard = useCallback(
     async (scheduleId: string) => {
-      return sendRequest<Guard>(`/schedules/${scheduleId}/enable`, 'PUT');
+      return sendRequest<Guard>(`/protection-rules/${scheduleId}/enable`, 'PUT');
     },
     [sendRequest]
   );
 
   const editGuard = useCallback(
     async (scheduleId: string, guard: createGuardRequest) => {
-      return sendRequest<Guard>(`/schedules/${scheduleId}`, 'PUT', guard);
+      return sendRequest<Guard>(`/protection-rules/${scheduleId}`, 'PUT', guard);
     },
     [sendRequest]
   );
 
   const deleteGuard = useCallback(
     async (scheduleId: string) => {
-      return sendRequest<Guard>(`/schedules/${scheduleId}`, 'DELETE');
+      return sendRequest<Guard>(`/protection-rules/${scheduleId}`, 'DELETE');
     },
     [sendRequest]
   );

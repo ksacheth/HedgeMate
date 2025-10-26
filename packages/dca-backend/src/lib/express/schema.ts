@@ -6,7 +6,13 @@ export const ScheduleParamsSchema = z.object({
     id: z.number(),
     version: z.number(),
   }),
-  name: z.string().default('DCASwap'),
+  chainId: z.number(),
+  collateralAsset: z
+    .string()
+    .refine((val) => /^0x[a-fA-F0-9]{40}$/.test(val), { message: 'Invalid token address' }),
+  debtAsset: z
+    .string()
+    .refine((val) => /^0x[a-fA-F0-9]{40}$/.test(val), { message: 'Invalid token address' }),
   pkpInfo: z.object({
     ethAddress: z
       .string()
@@ -14,13 +20,13 @@ export const ScheduleParamsSchema = z.object({
     publicKey: z.string(),
     tokenId: z.string(),
   }),
-  repayAmount: z
-    .string()
-    .refine((val) => /^\d+(\.\d{1,2})?$/.test(val), {
-      message: 'Must be a valid decimal number with up to 2 decimal places (USD currency)',
-    })
-    .transform((val) => parseFloat(val)),
-  triggerPrice: z.string(),
+  protocol: z.string().default('AaveV3'),
+  repayAmount: z.string().refine((val) => /^\d+(\.\d+)?$/.test(val), {
+    message: 'Must be a valid decimal number',
+  }),
+  triggerPrice: z.string().refine((val) => /^\d+(\.\d+)?$/.test(val), {
+    message: 'Must be a valid price number',
+  }),
 });
 export const ScheduleIdentitySchema = z.object({
   scheduleId: z

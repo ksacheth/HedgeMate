@@ -7,17 +7,17 @@ import { createVincentUserMiddleware } from '@lit-protocol/vincent-app-sdk/expre
 import { getAppInfo, getPKPInfo, isAppUser } from '@lit-protocol/vincent-app-sdk/jwt';
 
 import { handleGetHealthFactorRoute } from './healthFactor';
+import {
+  handleCreateProtectionRuleRoute,
+  handleDeleteProtectionRuleRoute,
+  handleDisableProtectionRuleRoute,
+  handleEditProtectionRuleRoute,
+  handleEnableProtectionRuleRoute,
+  handleListProtectionRulesRoute,
+} from './protectionRules';
 import { handleListPurchasesRoute } from './purchases';
 import { router } from './rules';
-import {
-  handleListSchedulesRoute,
-  handleEnableScheduleRoute,
-  handleDisableScheduleRoute,
-  handleCreateScheduleRoute,
-  handleDeleteScheduleRoute,
-  handleEditScheduleRoute,
-} from './schedules';
-import { userKey, VincentAuthenticatedRequest } from './types';
+import { VincentAuthenticatedRequest, userKey } from './types';
 import { env } from '../env';
 import { serviceLogger } from '../logger';
 
@@ -66,33 +66,45 @@ export const registerRoutes = (app: Express) => {
     setSentryUserMiddleware,
     handler(handleGetHealthFactorRoute)
   );
-  app.get('/schedules', middleware, setSentryUserMiddleware, handler(handleListSchedulesRoute));
-  app.post('/schedule', middleware, setSentryUserMiddleware, handler(handleCreateScheduleRoute));
-  app.put(
-    '/schedules/:scheduleId',
+
+  // Protection Rules routes (HealthGuard)
+  app.get(
+    '/protection-rules',
     middleware,
     setSentryUserMiddleware,
-    handler(handleEditScheduleRoute)
+    handler(handleListProtectionRulesRoute)
+  );
+  app.post(
+    '/protection-rule',
+    middleware,
+    setSentryUserMiddleware,
+    handler(handleCreateProtectionRuleRoute)
   );
   app.put(
-    '/schedules/:scheduleId/enable',
+    '/protection-rules/:scheduleId',
     middleware,
     setSentryUserMiddleware,
-    handler(handleEnableScheduleRoute)
+    handler(handleEditProtectionRuleRoute)
   );
   app.put(
-    '/schedules/:scheduleId/disable',
+    '/protection-rules/:scheduleId/enable',
     middleware,
     setSentryUserMiddleware,
-    handler(handleDisableScheduleRoute)
+    handler(handleEnableProtectionRuleRoute)
+  );
+  app.put(
+    '/protection-rules/:scheduleId/disable',
+    middleware,
+    setSentryUserMiddleware,
+    handler(handleDisableProtectionRuleRoute)
   );
   app.delete(
-    '/schedules/:scheduleId',
+    '/protection-rules/:scheduleId',
     middleware,
     setSentryUserMiddleware,
-    handler(handleDeleteScheduleRoute)
+    handler(handleDeleteProtectionRuleRoute)
   );
 
-  app.use('/api/v1/rules', middleware, setSentryUserMiddleware, handler(router));
+  app.use('/api/v1/rules', middleware, setSentryUserMiddleware, router);
   serviceLogger.info(`Routes registered`);
 };

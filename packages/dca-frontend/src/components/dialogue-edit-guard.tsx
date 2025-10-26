@@ -2,7 +2,6 @@ import React, { FormEvent, useCallback, useState } from 'react';
 import { Pencil } from 'lucide-react';
 
 import { InputAmount } from '@/components/input-amount';
-import { SelectFrequency } from '@/components/select-frequency';
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,7 +26,7 @@ export const DialogueEditGuard: React.FC<EditDialogProps> = ({ guard, onUpdate }
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [repayAmount, setrepayAmount] = useState<string>(String(data.repayAmount));
-  const [frequency, setFrequency] = useState<string>(data.triggerPrice);
+  const [triggerPrice, setTriggerPrice] = useState<string>(String(data.triggerPrice));
 
   const { editGuard } = useBackend();
 
@@ -35,19 +34,22 @@ export const DialogueEditGuard: React.FC<EditDialogProps> = ({ guard, onUpdate }
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (!repayAmount || Number(repayAmount) <= 0) {
-        alert('Please enter a positive Guard amount.');
+        alert('Please enter a positive repay amount.');
         return;
       }
-      if (!frequency) {
-        alert('Please select a frequency.');
+      if (!triggerPrice || Number(triggerPrice) <= 0) {
+        alert('Please enter a positive trigger price.');
         return;
       }
       try {
         setLoading(true);
         const updatedGuard = await editGuard(guard._id, {
-          name: data.name,
+          chainId: 11155111, // Sepolia testnet
+          collateralAsset: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14', // WETH on Sepolia
+          debtAsset: '0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8', // USDC on Sepolia
+          protocol: 'AaveV3',
           repayAmount,
-          triggerPrice: frequency,
+          triggerPrice,
         });
         onUpdate?.(updatedGuard);
         setOpen(false);
@@ -55,7 +57,7 @@ export const DialogueEditGuard: React.FC<EditDialogProps> = ({ guard, onUpdate }
         setLoading(false);
       }
     },
-    [guard, editGuard, frequency, onUpdate, repayAmount, data.name]
+    [guard, editGuard, triggerPrice, onUpdate, repayAmount]
   );
 
   return (
@@ -76,6 +78,7 @@ export const DialogueEditGuard: React.FC<EditDialogProps> = ({ guard, onUpdate }
           <Box className="grid gap-4 py-4">
             <InputAmount
               required
+              label="Repay Amount"
               value={repayAmount}
               onChange={setrepayAmount}
               disabled={loading}
@@ -83,10 +86,11 @@ export const DialogueEditGuard: React.FC<EditDialogProps> = ({ guard, onUpdate }
 
             <Separator />
 
-            <SelectFrequency
+            <InputAmount
               required
-              value={frequency}
-              onChange={setFrequency}
+              label="Trigger Price (ETH)"
+              value={triggerPrice}
+              onChange={setTriggerPrice}
               disabled={loading}
             />
           </Box>
