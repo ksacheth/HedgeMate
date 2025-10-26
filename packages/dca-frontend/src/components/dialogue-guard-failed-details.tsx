@@ -12,14 +12,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import { DCA } from '@/hooks/useBackend';
+import { Guard } from '@/hooks/useBackend';
 import { cn } from '@/lib/utils';
 
 export interface DCADetailsDialogProps {
-  dca: DCA;
+  guard: Guard;
 }
 
-export const DialogueDcaFailedDetails: React.FC<DCADetailsDialogProps> = ({ dca }) => {
+export const DialogueGuardFailedDetails: React.FC<DCADetailsDialogProps> = ({ guard }) => {
   const [open, setOpen] = useState(false);
 
   // Format date for display
@@ -29,8 +29,8 @@ export const DialogueDcaFailedDetails: React.FC<DCADetailsDialogProps> = ({ dca 
   };
 
   const failedAfterLastRun =
-    dca.failedAt && dca.lastFinishedAt
-      ? new Date(dca.lastFinishedAt) <= new Date(dca.failedAt)
+    guard.failedAt && guard.lastFinishedAt
+      ? new Date(guard.lastFinishedAt) <= new Date(guard.failedAt)
       : false;
 
   return (
@@ -47,18 +47,18 @@ export const DialogueDcaFailedDetails: React.FC<DCADetailsDialogProps> = ({ dca 
         </DialogHeader>
 
         <Box className="grid gap-4 py-4 overflow-y-auto max-h-[70vh]">
-          {dca.failedAt && failedAfterLastRun && (
+          {guard.failedAt && failedAfterLastRun && (
             <>
               <Separator />
 
               <div className="grid grid-cols-[auto,1fr] gap-3 items-baseline">
                 <span className="font-medium whitespace-nowrap">Failed At:</span>
                 <span className="overflow-hidden text-ellipsis text-red-500">
-                  {formatDate(dca.failedAt)}
+                  {formatDate(guard.failedAt)}
                 </span>
               </div>
 
-              {dca.failReason && (
+              {guard.failReason && (
                 <>
                   <Separator />
 
@@ -68,7 +68,7 @@ export const DialogueDcaFailedDetails: React.FC<DCADetailsDialogProps> = ({ dca 
                       className="text-red-500 text-sm border border-gray-200 rounded p-3 max-h-[120px] overflow-y-auto break-words whitespace-pre-wrap"
                       style={{ wordBreak: 'break-word', maxHeight: '120px', overflowY: 'scroll' }}
                       dangerouslySetInnerHTML={{
-                        __html: dca.failReason.replace(/\\n/g, '<br />'),
+                        __html: guard.failReason.replace(/\\n/g, '<br />'),
                       }}
                     />
                   </div>

@@ -11,6 +11,7 @@ export interface FrequencySelectProps {
   onChange?: (value: string) => void;
   required?: boolean;
   value?: string;
+  label?: string;
 }
 
 export const InputAmount: React.FC<FrequencySelectProps> = ({
@@ -18,12 +19,11 @@ export const InputAmount: React.FC<FrequencySelectProps> = ({
   onChange,
   value,
   required,
+  label,
 }) => {
   return (
     <Box className="py-0 gap-0 text-center">
-      <Label htmlFor="dcaAmount" className="mb-1 block text-sm font-medium">
-        DCA Amount
-      </Label>
+      {label && <Label className="mb-1 block text-sm font-medium">{label}</Label>}
       <Box className="flex flex-row items-center space-x-2">
         <Input
           required={required}

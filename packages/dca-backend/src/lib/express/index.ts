@@ -6,17 +6,18 @@ import helmet from 'helmet';
 import { createVincentUserMiddleware } from '@lit-protocol/vincent-app-sdk/expressMiddleware';
 import { getAppInfo, getPKPInfo, isAppUser } from '@lit-protocol/vincent-app-sdk/jwt';
 
+import { handleGetHealthFactorRoute } from './healthFactor';
+import {
+  handleCreateProtectionRuleRoute,
+  handleDeleteProtectionRuleRoute,
+  handleDisableProtectionRuleRoute,
+  handleEditProtectionRuleRoute,
+  handleEnableProtectionRuleRoute,
+  handleListProtectionRulesRoute,
+} from './protectionRules';
 import { handleListPurchasesRoute } from './purchases';
 import { router } from './rules';
-import {
-  handleListSchedulesRoute,
-  handleEnableScheduleRoute,
-  handleDisableScheduleRoute,
-  handleCreateScheduleRoute,
-  handleDeleteScheduleRoute,
-  handleEditScheduleRoute,
-} from './schedules';
-import { userKey, VincentAuthenticatedRequest } from './types';
+import { VincentAuthenticatedRequest, userKey } from './types';
 import { env } from '../env';
 import { serviceLogger } from '../logger';
 
@@ -59,33 +60,51 @@ export const registerRoutes = (app: Express) => {
   app.use(cors(corsConfig));
 
   app.get('/purchases', middleware, setSentryUserMiddleware, handler(handleListPurchasesRoute));
-  app.get('/schedules', middleware, setSentryUserMiddleware, handler(handleListSchedulesRoute));
-  app.post('/schedule', middleware, setSentryUserMiddleware, handler(handleCreateScheduleRoute));
-  app.put(
-    '/schedules/:scheduleId',
+  app.post(
+    '/health-factor',
     middleware,
     setSentryUserMiddleware,
-    handler(handleEditScheduleRoute)
-  );
-  app.put(
-    '/schedules/:scheduleId/enable',
-    middleware,
-    setSentryUserMiddleware,
-    handler(handleEnableScheduleRoute)
-  );
-  app.put(
-    '/schedules/:scheduleId/disable',
-    middleware,
-    setSentryUserMiddleware,
-    handler(handleDisableScheduleRoute)
-  );
-  app.delete(
-    '/schedules/:scheduleId',
-    middleware,
-    setSentryUserMiddleware,
-    handler(handleDeleteScheduleRoute)
+    handler(handleGetHealthFactorRoute)
   );
 
-  app.use('/api/v1/rules', middleware, setSentryUserMiddleware, handler(router));
+  // Protection Rules routes (HealthGuard)
+  app.get(
+    '/protection-rules',
+    middleware,
+    setSentryUserMiddleware,
+    handler(handleListProtectionRulesRoute)
+  );
+  app.post(
+    '/protection-rule',
+    middleware,
+    setSentryUserMiddleware,
+    handler(handleCreateProtectionRuleRoute)
+  );
+  app.put(
+    '/protection-rules/:scheduleId',
+    middleware,
+    setSentryUserMiddleware,
+    handler(handleEditProtectionRuleRoute)
+  );
+  app.put(
+    '/protection-rules/:scheduleId/enable',
+    middleware,
+    setSentryUserMiddleware,
+    handler(handleEnableProtectionRuleRoute)
+  );
+  app.put(
+    '/protection-rules/:scheduleId/disable',
+    middleware,
+    setSentryUserMiddleware,
+    handler(handleDisableProtectionRuleRoute)
+  );
+  app.delete(
+    '/protection-rules/:scheduleId',
+    middleware,
+    setSentryUserMiddleware,
+    handler(handleDeleteProtectionRuleRoute)
+  );
+
+  app.use('/api/v1/rules', middleware, setSentryUserMiddleware, router);
   serviceLogger.info(`Routes registered`);
 };

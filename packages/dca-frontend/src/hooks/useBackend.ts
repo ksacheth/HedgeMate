@@ -8,7 +8,7 @@ const { VITE_APP_ID, VITE_BACKEND_URL, VITE_REDIRECT_URI } = env;
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
-export type DCA = {
+export type Guard = {
   lastRunAt: string;
   nextRunAt: string;
   lastFinishedAt: string;
@@ -18,8 +18,8 @@ export type DCA = {
   failReason: string;
   data: {
     name: string;
-    purchaseAmount: number;
-    purchaseIntervalHuman: string;
+    repayAmount: number;
+    triggerPrice: string;
     vincentAppVersion: number;
     pkpInfo: {
       ethAddress: string;
@@ -30,11 +30,18 @@ export type DCA = {
   };
 };
 
-export interface CreateDCARequest {
-  name: string;
-  purchaseAmount: string;
-  purchaseIntervalHuman: string;
+export interface createGuardRequest {
+  chainId: number;
+  collateralAsset: string;
+  debtAsset: string;
+  protocol?: string;
+  repayAmount: string;
+  triggerPrice: string;
 }
+
+export type HealthFactorResponse = {
+  healthFactor: number;
+};
 
 export const useBackend = () => {
   const { authInfo } = useJwtContext();
@@ -82,52 +89,60 @@ export const useBackend = () => {
     [authInfo]
   );
 
-  const createDCA = useCallback(
-    async (dca: CreateDCARequest) => {
-      return sendRequest<DCA>('/schedule', 'POST', dca);
+  const createGuard = useCallback(
+    async (guard: createGuardRequest) => {
+      return sendRequest<Guard>('/protection-rule', 'POST', guard);
     },
     [sendRequest]
   );
 
-  const getDCAs = useCallback(async () => {
-    return sendRequest<DCA[]>('/schedules', 'GET');
+  const getGuards = useCallback(async () => {
+    return sendRequest<Guard[]>('/protection-rules', 'GET');
   }, [sendRequest]);
 
-  const disableDCA = useCallback(
+  const disableGuard = useCallback(
     async (scheduleId: string) => {
-      return sendRequest<DCA>(`/schedules/${scheduleId}/disable`, 'PUT');
+      return sendRequest<Guard>(`/protection-rules/${scheduleId}/disable`, 'PUT');
     },
     [sendRequest]
   );
 
-  const enableDCA = useCallback(
+  const enableGuard = useCallback(
     async (scheduleId: string) => {
-      return sendRequest<DCA>(`/schedules/${scheduleId}/enable`, 'PUT');
+      return sendRequest<Guard>(`/protection-rules/${scheduleId}/enable`, 'PUT');
     },
     [sendRequest]
   );
 
-  const editDCA = useCallback(
-    async (scheduleId: string, dca: CreateDCARequest) => {
-      return sendRequest<DCA>(`/schedules/${scheduleId}`, 'PUT', dca);
+  const editGuard = useCallback(
+    async (scheduleId: string, guard: createGuardRequest) => {
+      return sendRequest<Guard>(`/protection-rules/${scheduleId}`, 'PUT', guard);
     },
     [sendRequest]
   );
 
-  const deleteDCA = useCallback(
+  const deleteGuard = useCallback(
     async (scheduleId: string) => {
-      return sendRequest<DCA>(`/schedules/${scheduleId}`, 'DELETE');
+      return sendRequest<Guard>(`/protection-rules/${scheduleId}`, 'DELETE');
+    },
+    [sendRequest]
+  );
+
+  const getHealthFactor = useCallback(
+    async (userAddress: string) => {
+      return sendRequest<number>('/health-factor', 'POST', { userAddress });
     },
     [sendRequest]
   );
 
   return {
-    createDCA,
-    deleteDCA,
-    disableDCA,
-    editDCA,
-    enableDCA,
-    getDCAs,
+    createGuard,
+    deleteGuard,
+    disableGuard,
+    editGuard,
+    enableGuard,
+    getGuards,
+    getHealthFactor,
     getJwt,
   };
 };
