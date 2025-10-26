@@ -3,6 +3,9 @@ import consola from 'consola';
 
 import { createAgenda, getAgenda } from './agenda/agendaClient';
 import { executeDCASwapJobDef } from './agenda/jobs';
+import { executeLoanProtection } from './agenda/jobs/executeDCASwap/executeLoanProtection';
+
+const LOAN_PROTECTION_JOB_NAME = 'execute-loan-protection';
 
 // Function to create and configure a new agenda instance
 export async function startWorker() {
@@ -10,6 +13,7 @@ export async function startWorker() {
 
   const agenda = getAgenda();
 
+  // Define the old DCA swap job
   agenda.define(executeDCASwapJobDef.jobName, async (job: executeDCASwapJobDef.JobType) =>
     Sentry.withIsolationScope(async (scope) => {
       // TODO: add job-aware logic such as cool-downs in case of repeated failures here
@@ -39,6 +43,9 @@ export async function startWorker() {
       }
     })
   );
+
+  // Define the new loan protection job
+  agenda.define(LOAN_PROTECTION_JOB_NAME, executeLoanProtection);
 
   return agenda;
 }

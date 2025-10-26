@@ -2,8 +2,7 @@ import { Agenda, Job } from '@whisthub/agenda';
 import { Types } from 'mongoose';
 
 import { serviceLogger } from '../../logger';
-import { executeLoanProtection } from './executeDCASwap/executeLoanProtection';
-import { ProtectionRule, IProtectionRule } from '../../mongo/protectionRule.schema';
+import { IProtectionRule, ProtectionRule } from '../../mongo/protectionRule.schema';
 import { TIME } from './executeDCASwap/utils/constants';
 
 const JOB_NAME = 'execute-loan-protection';
@@ -25,7 +24,7 @@ export class LoanProtectionJobManager {
 
   constructor(agendaInstance: Agenda) {
     this.agenda = agendaInstance;
-    this.agenda.define(JOB_NAME, executeLoanProtection);
+    // Note: Job definition is handled in jobWorker.ts to ensure proper initialization
   }
 
   public async createRule(
