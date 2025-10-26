@@ -15,11 +15,11 @@ import { Separator } from '@/components/ui/separator';
 import { Guard } from '@/hooks/useBackend';
 import { cn } from '@/lib/utils';
 
-export interface DCADetailsDialogProps {
+export interface GuardDetailsDialogProps {
   guard: Guard;
 }
 
-export const DialogueGuardFailedDetails: React.FC<DCADetailsDialogProps> = ({ guard }) => {
+export const DialogueGuardFailedDetails: React.FC<GuardDetailsDialogProps> = ({ guard }) => {
   const [open, setOpen] = useState(false);
 
   // Format date for display
@@ -42,8 +42,8 @@ export const DialogueGuardFailedDetails: React.FC<DCADetailsDialogProps> = ({ gu
       </DialogTrigger>
       <DialogContent className={cn(failedAfterLastRun ? 'min-w-2/3' : '', 'overflow-hidden')}>
         <DialogHeader>
-          <DialogTitle>DCA Schedule Details</DialogTitle>
-          <DialogDescription>Detailed information about your DCA schedule.</DialogDescription>
+          <DialogTitle>Health Guard Details</DialogTitle>
+          <DialogDescription>Detailed information about your health guard.</DialogDescription>
         </DialogHeader>
 
         <Box className="grid gap-4 py-4 overflow-y-auto max-h-[70vh]">

@@ -214,7 +214,7 @@ export const ActiveGuards: React.FC = () => {
   );
 
   return (
-    <Card data-test-id="active-dcas" className="w-full bg-white p-6 shadow-md">
+    <Card data-test-id="active-health-guards" className="w-full bg-white p-6 shadow-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">Active Guard Schedules</CardTitle>
       </CardHeader>

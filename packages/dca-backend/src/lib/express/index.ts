@@ -15,8 +15,6 @@ import {
   handleEnableProtectionRuleRoute,
   handleListProtectionRulesRoute,
 } from './protectionRules';
-import { handleListPurchasesRoute } from './purchases';
-import { router } from './rules';
 import { VincentAuthenticatedRequest, userKey } from './types';
 import { env } from '../env';
 import { serviceLogger } from '../logger';
@@ -59,7 +57,6 @@ export const registerRoutes = (app: Express) => {
   }
   app.use(cors(corsConfig));
 
-  app.get('/purchases', middleware, setSentryUserMiddleware, handler(handleListPurchasesRoute));
   app.post(
     '/health-factor',
     middleware,
@@ -105,6 +102,5 @@ export const registerRoutes = (app: Express) => {
     handler(handleDeleteProtectionRuleRoute)
   );
 
-  app.use('/api/v1/rules', middleware, setSentryUserMiddleware, router);
   serviceLogger.info(`Routes registered`);
 };
