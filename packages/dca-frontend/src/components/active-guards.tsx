@@ -14,10 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { DialogueEditGuard } from '@/components/dialogue-edit-dca';
+import { DialogueEditGuard } from '@/components/dialogue-edit-guard';
 import { FREQUENCIES } from '@/components/select-frequency';
 import { Spinner } from '@/components/ui/spinner';
-import { DialogueGuardFailedDetails } from '@/components/dialogue-dca-failed-details';
+import { DialogueGuardFailedDetails } from '@/components/dialogue-guard-failed-details';
 
 import { cn } from '@/lib/utils';
 

@@ -45,7 +45,7 @@ export const handleCreateScheduleRoute = async (
 
   const schedule = await createJob(
     { ...scheduleParams },
-    { interval: scheduleParams.purchaseIntervalHuman }
+    { interval: scheduleParams.triggerPrice }
   );
   res.status(201).json({ data: schedule.toJson(), success: true });
 };

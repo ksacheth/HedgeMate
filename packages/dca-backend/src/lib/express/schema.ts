@@ -14,13 +14,13 @@ export const ScheduleParamsSchema = z.object({
     publicKey: z.string(),
     tokenId: z.string(),
   }),
-  purchaseAmount: z
+  repayAmount: z
     .string()
     .refine((val) => /^\d+(\.\d{1,2})?$/.test(val), {
       message: 'Must be a valid decimal number with up to 2 decimal places (USD currency)',
     })
     .transform((val) => parseFloat(val)),
-  purchaseIntervalHuman: z.string(),
+  triggerPrice: z.string(),
 });
 export const ScheduleIdentitySchema = z.object({
   scheduleId: z

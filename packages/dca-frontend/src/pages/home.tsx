@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { CreateHealthGuard } from '@/components/create-dca';
-import { ActiveGuards } from '@/components/active-dcas';
+import { CreateHealthGuard } from '@/components/create-guards';
+import { ActiveGuards } from '@/components/active-guards';
 import { Info } from '@/components/info';
 
 enum Tab {
